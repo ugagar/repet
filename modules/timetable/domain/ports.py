@@ -3,5 +3,13 @@
 """
 
 
-class TimetableRepository(Protocol):
-    pass
+class Repository(Protocol):
+    def get(): pass
+    def update(): pass
+    def save(): pass
+    def delete(): pass
+
+
+class Printer(Protocol):
+    def print(): pass
+
