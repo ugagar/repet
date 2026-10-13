@@ -10,6 +10,5 @@ class Repository(Protocol):
     def delete(): pass
 
 
-class Printer(Protocol):
-    def print(): pass
-
+class Viewer(Protocol):
+    def view(): pass
