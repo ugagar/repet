@@ -1,6 +1,7 @@
 """
 Порты модуля timetable. (Что нужно для работы)
 """
+from typing import Protocol
 
 
 class Repository(Protocol):
