@@ -9,7 +9,7 @@ from datetime import datetime
 
 @dataclass
 class Event:
-    title: str
-    describe: str
     start_dttm: datetime
     end_dttm: datetime
+    title: str
+    describe: str

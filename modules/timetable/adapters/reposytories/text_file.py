@@ -1,7 +1,8 @@
 from pathlib import Path
+from datetime import datetime
 
-from timetable.domain.event import Event
-from timetable.domain.interval import DatetimeInterval
+from domain.event import Event
+from domain.interval import DatetimeInterval
 
 
 class TextFileRepo:
@@ -14,19 +15,26 @@ class TextFileRepo:
 
     def _create_file_if_not_exists(self) -> None:
         if not self._file.exists():
-            self._file.mkdir(parents=True, exist_ok=True)
             self._file.touch(exist_ok=True)
 
+    @staticmethod
     def to_text(event: Event) -> str:
-        return f"{event.start_dttm}|{event.end_dttm}|{event.title}|{event.describe}"
-        
+        return f"{event.start_dttm}|{event.end_dttm}|{event.title}|{event.describe}\n"
+
+    @staticmethod
     def from_text(line: str) -> Event:
-        return Event(*line.split("|"))
+        dttm_start, dttm_end, title,  desc = line.split("|")
+        return Event(
+            start_dttm=datetime.fromisoformat(dttm_start),
+            end_dttm=datetime.fromisoformat(dttm_end),
+            title=title,
+            describe=desc,
+        )
 
 
     def get(self, interval: DatetimeInterval) -> list[Event]:
-        result = []
-        with self._file.open(mode="r") as f:
+        result: list[Event] = []
+        with self._file.open(mode="r", encoding="utf-8") as f:
             for line in f:
                 event: Event = self.from_text(line)
 
@@ -34,12 +42,13 @@ class TextFileRepo:
                     continue
 
                 result.append(event)
+        return result
 
     def update(self, event: Event) -> bool:  pass
 
 
     def save(self, event: Event) -> bool:
-        with self._file.open(mode="+a") as f:
+        with self._file.open(mode="+a", encoding="utf-8") as f:
             f.write(self.to_text(event))
 
         
